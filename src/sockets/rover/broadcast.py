@@ -1,8 +1,8 @@
 import socket
 import time
 from src.config import ROVER_BROADCAST_MSG, ROVER_BROADCAST_PORT, BROADCAST_INTERVAL
-import src.state
 from src.state import (
+    stop_event,
     get_rover_broadcasting,
     get_rover_connected,
     set_rover_broadcasting,
@@ -19,7 +19,7 @@ def rover_send_broadcast():
     broadcast_addr = get_broadcast_addr()
 
     try:
-        while not src.state.stop_event.is_set():
+        while not stop_event.is_set():
             connected = get_rover_connected()
             broadcasting = get_rover_broadcasting()
             if not connected:

@@ -1,12 +1,7 @@
 services:
   app:
     build: .
-    ports:
-      - "8080:8080/udp"
-      - "8081:8081/udp"
-      - "12345:12345/udp"
-      - "8765:8765"
-      - "8766:8766"
+    network_mode: host
     volumes:
       - .:/app
     restart: unless-stopped

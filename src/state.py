@@ -55,10 +55,30 @@ systemStatus = {
         "leftCameraFPS": 0.0,
     },
     "encodersData": {
-        "frontRightMotorEncoderReading": 0,
-        "frontLeftMotorEncoderReading": 0,
-        "rearRightMotorEncoderReading": 0,
-        "rearLeftMotorEncoderReading": 0,
+        "frontRightMotorEncoderReading": {
+            "encoderDir": "",
+            "encoderStep": 0,
+            "encoderTurns": 0,
+            "encoderUpdated": False,
+        },
+        "frontLeftMotorEncoderReading": {
+            "encoderDir": "",
+            "encoderStep": 0,
+            "encoderTurns": 0,
+            "encoderUpdated": False,
+        },
+        "rearRightMotorEncoderReading": {
+            "encoderDir": "",
+            "encoderStep": 0,
+            "encoderTurns": 0,
+            "encoderUpdated": False,
+        },
+        "rearLeftMotorEncoderReading": {
+            "encoderDir": "",
+            "encoderStep": 0,
+            "encoderTurns": 0,
+            "encoderUpdated": False,
+        },
     },
     "accelerometerData": {
         "accelerometerXReading": 0,
@@ -130,12 +150,23 @@ def get_rover_connected():
 # =============================================================================
 
 
-def set_encoder_reading(name: str, value):
-    with status_lock:
-        if name not in systemStatus["encodersData"]:
-            raise KeyError(f"Unknown encoder field: {name}")
+def set_encoder_reading(name, value):
+    if name not in systemStatus["encodersData"]:
+        raise KeyError(f"Unknown encoder field: {name}")
 
-        systemStatus["encodersData"][name] = value
+    with status_lock:
+        encoder_state = systemStatus["encodersData"][name]
+
+        encoder_state["encoderDir"] = value.get("encoderDir", "")
+
+        encoder_state["encoderStep"] = value.get("encoderStep", 0)
+
+        encoder_state["encoderTurns"] = value.get("encoderTurns", 0)
+
+        encoder_state["encoderUpdated"] = value.get(
+            "encoderUpdated",
+            False,
+        )
 
 
 # =============================================================================

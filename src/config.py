@@ -25,4 +25,4 @@ VIDEO_WEBSOCKET_PORT = 8765  # binary frames stream
 CONTROL_WEBSOCKET_PORT = 8766  # JSON system status and command channel
 
 FRAME_SEND_INTERVAL = 0.033  # ~30 FPS
-STATUS_SEND_INTERVAL = 0.1  # how often to push system status (seconds)
+STATUS_SEND_INTERVAL = 0.5  # how often to push system status (seconds)

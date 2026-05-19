@@ -5,6 +5,7 @@ from src.sockets.camera.broadcast import cameras_send_broadcast
 from src.sockets.camera.receiver import stream_receiver
 from src.sockets.camera.watchdog import watchdog
 from src.sockets.rover.broadcast import rover_send_broadcast
+from src.sockets.rover.control import rover_control
 
 _threads = []
 
@@ -34,6 +35,11 @@ def start_socket_server():
     _start_thread(
         target=rover_send_broadcast,
         name="rover-broadcast",
+    )
+
+    _start_thread(
+        target=rover_control,
+        name="rover-control",
     )
 
     print("[SOCKETS] Running")

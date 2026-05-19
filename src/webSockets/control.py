@@ -9,6 +9,7 @@ from src.config import (
     LEFT_IMAGE_FOLDER,
     RIGHT_IMAGE_FOLDER,
 )
+from src.sockets.rover.control import send_to_rover
 from src.state import (
     frame_lock,
     refresh_fps,
@@ -79,32 +80,33 @@ async def receive_commands(websocket):
                     print(f"Unknown mode: {mode_str}")
                 continue
 
-            # Handle command messages (ignored for now)
+            # Handle command messages
             if data.get("type") == "command":
                 if data.get("command") == "drive":
                     state = data.get("state")
+                    rover_direction = ""
                     if state.get("state") == "press":
                         match state.get("key"):
                             case "w":
-                                # TODO Build forward message here
-                                rover_message = "Forward"
-                                print("Forward")
+                                rover_direction = "forward"
+                                print("forward")
                             case "s":
-                                # TODO Build back message here
-                                rover_message = "Back"
-                                print("Back")
+                                rover_direction = "backward"
+                                print("backward")
                             case "a":
-                                # TODO Build left message here
-                                rover_message = "Left"
-                                print("Left")
+                                rover_direction = "left"
+                                print("left")
                             case "d":
-                                # TODO Build right message here
-                                rover_message = "Right"
-                                print("Right")
+                                rover_direction = "right"
+                                print("right")
                     else:
-                        # TODO Build stop message here
-                        rover_message = "Stop"
-                        print("Stop")
+                        rover_direction = "stop"
+                        print("stop")
+                    rover_message = {
+                        "command": "move",
+                        "direction": rover_direction,
+                    }
+                    send_to_rover(rover_message)
 
             if data.get("command") == "saveImage":
                 print("Taking pictures")
